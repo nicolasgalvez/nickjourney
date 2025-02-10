@@ -1,18 +1,24 @@
 {
 	"type": "module",
 	"scripts": {
-		"start": "npx tsx --env-file=.env --watch src/index.ts"
+		"start": "npx tsx --watch src/index.ts",
+		"generate:invoke": "npx @hey-api/openapi-ts -i invoke-openapi.json -o src/invoke -c @hey-api/client-fetch"
 	},
 	"dependencies": {
 		"@discordjs/rest": "^2.4.2",
+		"@hey-api/client-fetch": "^0.8.1",
+		"axios": "^1.7.9",
+		"body-parser": "^2.0.2",
+		"cors": "^2.8.5",
 		"discord.js": "^14.17.3",
+		"dotenv": "^16.4.7",
 		"express": "^5.0.1",
 		"express-session": "^1.18.1",
 		"passport": "^0.7.0",
-		"passport-google-oauth20": "^2.0.0",
-		"dotenv": "^16.4.7"
+		"passport-google-oauth20": "^2.0.0"
 	},
 	"devDependencies": {
+		"@hey-api/openapi-ts": "^0.61.2",
 		"@types/express": "^5.0.0",
 		"@types/express-session": "^1.18.1",
 		"@types/node": "^22.13.1",
