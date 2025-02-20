@@ -38,7 +38,11 @@ client.on('ready', () => {
 });
 
 client.on('interactionCreate', async (interaction: CommandInteraction) => {
-  if (!interaction.isCommand()) return;
+  if (!interaction.isCommand()) {
+    // print default message
+    console.log(`Received interaction: ${interaction}`);
+    return;
+  }
 
   const { commandName } = interaction;
 
@@ -61,7 +65,7 @@ client.on('interactionCreate', async (interaction: CommandInteraction) => {
 
       // Create Discord attachment
       const attachment = new AttachmentBuilder(filePath);
-
+ 
       // Reply with the image
       await interaction.editReply({ files: [attachment] });
 
@@ -69,7 +73,7 @@ client.on('interactionCreate', async (interaction: CommandInteraction) => {
       fs.unlinkSync(filePath);
     } catch (error) {
       console.error('Error generating image:', error);
-      await interaction.editReply("An error occurred while generating the image.");
+      await interaction.editReply("Sorry, I couldn't generate the image. Nick probably booted into Windows to play a game. What a cad.");
     }
   }
 });
