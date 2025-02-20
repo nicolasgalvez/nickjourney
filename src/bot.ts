@@ -5,7 +5,6 @@ import fs from 'fs';
 
 dotenv.config();
 
-
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 const commands = [
@@ -45,7 +44,6 @@ client.on('interactionCreate', async (interaction: CommandInteraction) => {
 
   if (commandName === 'scribble') {
     await interaction.deferReply(); // Let Discord know the bot is processing
-
     const prompt = interaction.options.getString('prompt') || "a cool futuristic robot with glowing eyes, highly detailed, cinematic lighting";
 
     try {

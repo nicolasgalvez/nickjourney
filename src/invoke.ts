@@ -1,8 +1,16 @@
 import axios from "axios";
-// load image api from .env file`
-const {IMAGE_API_URL} = process.env
+import dotenv from "dotenv";
+import { join } from "path";
 
-const SD_API_URL = IMAGE_API_URL + "/sdapi/v1/txt2img";
+dotenv.config();
+
+const { IMAGE_API_URL, CLOUDFLARE_CLIENT_ID, CLOUDFLARE_CLIENT_SECRET } = process.env;
+
+if (!IMAGE_API_URL || !CLOUDFLARE_CLIENT_ID || !CLOUDFLARE_CLIENT_SECRET) {
+  throw new Error("❌ Missing Cloudflare Service Token credentials in .env");
+}
+
+const SD_API_URL = join(IMAGE_API_URL, "sdapi/v1/txt2img");
 
 interface GenerateImageOptions {
   prompt: string;
@@ -19,9 +27,8 @@ interface SDResponse {
 }
 
 /**
- * Generates an image using the Stable Diffusion API.
- * @param {GenerateImageOptions} options - The parameters for image generation.
- * @returns {Promise<SDResponse>} - A promise resolving to the generated image data.
+ * Generates an image using the InvokeAI API with Cloudflare Service Authentication.
+ * The request includes the Cloudflare Service Token in headers.
  */
 export async function generateImage(options: GenerateImageOptions): Promise<SDResponse> {
   const {
@@ -53,12 +60,16 @@ export async function generateImage(options: GenerateImageOptions): Promise<SDRe
     };
 
     const response = await axios.post<SDResponse>(SD_API_URL, requestData, {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "CF-Access-Client-Id": CLOUDFLARE_CLIENT_ID, // ✅ Required for Service Authentication
+        "CF-Access-Client-Secret": CLOUDFLARE_CLIENT_SECRET, // ✅ Required for Service Authentication
+      },
     });
 
     return response.data;
   } catch (error) {
-    console.error("Error generating image:", error);
+    console.error("❌ Error generating image:", error);
     throw new Error("Image generation failed");
   }
 }
