@@ -86,7 +86,9 @@ client.on('interactionCreate', async (interaction: Interaction) => {
       const attachment = new AttachmentBuilder(filePath);
  
       // Reply with the image
-      await interaction.editReply({ files: [attachment] });
+      await interaction.editReply({ 
+        content: `${prompt}`,
+        files: [attachment] });
 
       // Delete the file after sending (optional)
       fs.unlinkSync(filePath);
