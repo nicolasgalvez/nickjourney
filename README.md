@@ -25,6 +25,11 @@ Home PC
 * LAN access to the webUI
 * API endpoints enabled in Stable Diffusion webUI
 
+## Why so complicated?
+Good question, it doesn't need to be. You can run your discord bot on localhost of the same machine as the image generator.
+
+I wanted to learn more about Coolify and Cloudflare, CI/CD, and Docker. Plus it just feels like the less running in my house, the better for security.
+
 # Usage
 
 From your Discord server with the bot enabled: `/scribble <prompt>`

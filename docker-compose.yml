@@ -1,0 +1,11 @@
+services:
+  app:
+    image: node:22-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: sh -c "npm install && npx tsx src/index.ts"
+    ports:
+      - "3000:3000" # Adjust if your app uses a different port
+    environment:
+      - NODE_ENV=production
