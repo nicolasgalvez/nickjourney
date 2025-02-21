@@ -1,11 +1,14 @@
-import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, AttachmentBuilder, CommandInteraction } from 'discord.js';
+import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, AttachmentBuilder, Interaction } from 'discord.js';
 import dotenv from 'dotenv';
 import { generateImage } from './invoke';
 import fs from 'fs';
 
 dotenv.config();
+const allowedGuilds = process.env.ALLOWED_GUILDS?.split(",") || [];
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+
+
 
 const commands = [
   new SlashCommandBuilder()
@@ -22,12 +25,24 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN)
 
 (async () => {
   try {
-    console.log('Started refreshing application (/) commands.');
-    await rest.put(
-      Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
-      { body: commands }
-    );
-    console.log('Successfully reloaded application (/) commands.');
+    console.log("Started refreshing application (/) commands.");
+
+    // Parse allowed guilds from .env
+
+    for (const guildId of allowedGuilds) {
+      try {
+        await rest.put(
+          Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId.trim()), // Trim to avoid spaces
+          { body: commands }
+        );
+        console.log(`Successfully reloaded commands for guild: ${guildId}`);
+      }
+      catch (error) {
+        console.error(`Failed to register commands for guild ${guildId}:`, error);
+      }
+    }
+
+    console.log("Successfully reloaded application (/) commands for all allowed guilds.");
   } catch (error) {
     console.error(error);
   }
@@ -37,10 +52,14 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user?.tag}!`);
 });
 
-client.on('interactionCreate', async (interaction: CommandInteraction) => {
+client.on('interactionCreate', async (interaction: Interaction) => {
   if (!interaction.isCommand()) {
     // print default message
     console.log(`Received interaction: ${interaction}`);
+    return;
+  }
+  if (!allowedGuilds.includes(interaction.guildId!)) {
+    await interaction.reply({ content: "This bot is not authorized for this server.", ephemeral: true });
     return;
   }
 
