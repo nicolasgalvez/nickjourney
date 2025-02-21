@@ -8,13 +8,9 @@ dotenv.config();
 
 const app = express();
 
-// ...existing code...
-
+// Google auth middleware
+// Currently no use for this during testing. I still need to look up how discord oauth works for public apps.
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env;
-
-console.log('GOOGLE_CLIENT_ID:', GOOGLE_CLIENT_ID);
-console.log('GOOGLE_CLIENT_SECRET:', GOOGLE_CLIENT_SECRET);
-
 if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
   import('./config/passport').then(() => {
     app.use(session({ secret: 'your_secret_key', resave: false, saveUninitialized: false }));
@@ -28,6 +24,5 @@ if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
   console.warn('Google OAuth credentials are not set. Authentication is disabled.');
 }
 
-// ...existing code...
 
 export default app;
