@@ -1,14 +1,12 @@
 # Discord SD AI adapter
 
-An app to connect to my old PC running Stable Diffusion webUI to generate images midjourney style.
-
-My girlfriend wanted to have a Discord bot she could prompt like midjourney.
+A broke engineer's attempt to make a midjourney type Discord bot on an old PC.
 
 After looking at the terrifying costs to host a cloud GPU, I set up [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui) on my old PC.
-I already had a Coolify server running where I deploy test projects, so I started with a hello world chatbot and went from there.
+I already had a [Coolify](https://coolify.io/) server running where I deploy test projects, so I started with a hello world chatbot and went from there.
 
 # The Setup
-
+![Networking Diagram for my setup](https://raw.githubusercontent.com/nicolasgalvez/discord-invoke/a8fc3a0d7717388a9043de95476349d2441d2217/.github/assets/Discord%20Bot.jpg)
 Network
 
 * Cloudflare tunnel to my old PC. No exposing ports and IPs like in the old days.
@@ -18,7 +16,7 @@ Network
 Discord App
 
 * Coolify Server hosting an Express app
-    * Express handles the \`/scribble\` command from Discord, and sends the generated image back to chat.
+    * Express handles the `/scribble` command from Discord, and sends the generated image back to chat.
 * Create a private Discord app with guild\_id (your server id) permissions
 
 Home PC
@@ -29,7 +27,7 @@ Home PC
 
 # Usage
 
-`From your Discord server with the bot enabled: /scribble <prompt>`
+From your Discord server with the bot enabled: `/scribble <prompt>`
 
 # Building/Running
 
@@ -44,12 +42,14 @@ You should see a message that you are connected to Discord.
 Add this to the Configuration > General > Start Command field:
 `npx tsx src/index.ts`
 
+You can also add a Github Webhook so it will auto deploy when you push changes. Coolify is so... cool!
+
 ## SD Server
 
 Install SD web UI by following the instructions on their Github.
-Once it's working add the \`--listen\` arguement to ensure the API is on. Here's some settings that work with my 16gb 4060 ti:
+Once it's working add the `--listen` arguement to ensure the API is on. Here's some settings that work with my 16gb 4060 ti:
 
-\`python launch.py --listen --xformers --api --medvram --always-batch-cond-uncond\`
+`python launch.py --listen --xformers --api --medvram --always-batch-cond-uncond`
 
 I'm also running ollama so I don't want to eat up all the vram!
 
