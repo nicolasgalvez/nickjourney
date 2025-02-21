@@ -1,10 +1,11 @@
 services:
   app:
+    build: .
     image: node:22-alpine
-    working_dir: /dist
+    working_dir: /app
     volumes:
-      - .:/dist
-    # command: sh -c "npm install && npx tsx src/index.ts"
+      - .:/app
+    command: sh -c "npm install && npx tsx src/index.ts"
     ports:
       - "3000:3000" # Adjust if your app uses a different port
     restart: "no"  # 🚀 Prevents automatic restarts
