@@ -21,10 +21,13 @@ if (!COMFYUI_SERVER) {
   throw new Error("❌ Missing COMFYUI_SERVER in .env");
 }
 
-const WORKFLOW_PATH = path.join(__dirname, "workflow_api.json");
+const WORKFLOW_PATH = path.join(__dirname, "workflows");
 
 interface GenerateImageOptions {
   prompt: string;
+  negativePrompt?: string;
+  workflowFile?: string;
+  loras?: string[];
 }
 
 export async function generateImage(options: GenerateImageOptions): Promise<string | null> {
@@ -37,7 +40,7 @@ export async function generateImage(options: GenerateImageOptions): Promise<stri
         console.log("✅ WebSocket connected to ComfyUI");
 
         // Load and update the workflow JSON
-        const workflow = loadWorkflow(WORKFLOW_PATH);
+        const workflow = loadWorkflow(path.join(WORKFLOW_PATH, options.workflowFile));
         updateWorkflow(workflow, options.prompt);
 
         // Send the workflow request

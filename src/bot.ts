@@ -9,7 +9,6 @@ const allowedGuilds = process.env.ALLOWED_GUILDS?.split(",") || [];
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 
-
 const commands = [
   new SlashCommandBuilder()
     .setName('scribble')
@@ -22,6 +21,22 @@ const commands = [
 ].map(command => command.toJSON());
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
+
+// Clear bot
+// for (const guildId of allowedGuilds) {
+//   (async () => {
+//     try {
+//         console.log('Removing all guild slash commands...');
+//         await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId), { body: [] });
+//         console.log('Successfully removed all commands.');
+//     } catch (error) {
+//         console.error(error);
+//     }
+//   })();
+// }
+
+
+
 
 (async () => {
   try {
@@ -68,11 +83,25 @@ client.on('interactionCreate', async (interaction: Interaction) => {
   if (commandName === 'scribble') {
     await interaction.deferReply(); // Let Discord know the bot is processing
     const prompt = interaction.options.getString('prompt') || "a cool futuristic robot with glowing eyes, highly detailed, cinematic lighting";
-
+    // get workflow from prompt... if it starts with "<space>" then use the space.json workflow
+    // if it starts with "<lora>" then use the lora.json workflow
+    // if it starts with "<negative>" then use the negative.json workflow
+    let workflowFile = 'workflow_api.json';
+    if(prompt.startsWith("<space>")) {
+      workflowFile = 'space.json';
+    } else if(prompt.startsWith("<horror>")) {
+      workflowFile = 'lora.json';
+    // } else if(prompt.startsWith("<furry>")) {
+    //   workflowFile = 'negative.json';
+    }
     try {
       console.log(`Generating image for prompt: ${prompt}`);
       // Generate the image from the provided prompt
-      const response = await generateImage({ prompt,negative_prompt: process.env.NEGATIVE_PROMPT ? process.env.NEGATIVE_PROMPT : "" });
+      const response = await generateImage({ prompt: prompt,
+        negativePrompt: process.env.NEGATIVE_PROMPT ? process.env.NEGATIVE_PROMPT : "",
+        // if prompt starts with "<space>" then use the space.json workflow
+        workflowFile: workflowFile
+      });
       console.log(response)
       // Convert base64 to Buffer
       const base64Image = response.data;
