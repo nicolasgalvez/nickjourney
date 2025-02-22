@@ -1,7 +1,7 @@
 {
     "3": {
       "inputs": {
-        "seed": 12282656824283,
+        "seed": 1055441801019581,
         "steps": 20,
         "cfg": 8,
         "sampler_name": "euler",
@@ -51,7 +51,7 @@
     },
     "6": {
       "inputs": {
-        "text": "<trek> sad klingon",
+        "text": "Lieutenant Worf at a pretty princess tea party",
         "clip": [
           "20",
           1
@@ -115,9 +115,9 @@
     },
     "20": {
       "inputs": {
-        "lora_01": "SD1.5/race_st_klingon.safetensors",
-        "strength_01": 0,
-        "lora_02": "SD1.5/StartrekTosV3-000028.safetensors",
+        "lora_01": "SD1.5/Worf.safetensors",
+        "strength_01": 0.7000000000000001,
+        "lora_02": "None",
         "strength_02": 0,
         "lora_03": "None",
         "strength_03": 1,
