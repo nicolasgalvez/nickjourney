@@ -1,6 +1,6 @@
 import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, AttachmentBuilder, Interaction } from 'discord.js';
 import dotenv from 'dotenv';
-import { generateImage } from './invoke';
+import { generateImage } from "./comfyui";
 import fs from 'fs';
 
 dotenv.config();
@@ -73,9 +73,9 @@ client.on('interactionCreate', async (interaction: Interaction) => {
       console.log(`Generating image for prompt: ${prompt}`);
       // Generate the image from the provided prompt
       const response = await generateImage({ prompt,negative_prompt: process.env.NEGATIVE_PROMPT ? process.env.NEGATIVE_PROMPT : "" });
-
+      console.log(response)
       // Convert base64 to Buffer
-      const base64Image = response.images[0];
+      const base64Image = response.data;
       const imageBuffer = Buffer.from(base64Image, 'base64');
 
       // Save image temporarily
@@ -87,14 +87,14 @@ client.on('interactionCreate', async (interaction: Interaction) => {
  
       // Reply with the image
       await interaction.editReply({ 
-        content: `${prompt}`,
+        content: `${response.imageId}: ${prompt}`,
         files: [attachment] });
 
       // Delete the file after sending (optional)
       fs.unlinkSync(filePath);
     } catch (error) {
       console.error('Error generating image:', error);
-      await interaction.editReply("Sorry, I couldn't generate the image. Nick probably booted into Windows to play a game. What a cad.");
+      await interaction.editReply("Sorry had a bit of a problem.");
     }
   }
 });
