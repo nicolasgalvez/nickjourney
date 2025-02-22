@@ -6,8 +6,6 @@ WORKDIR /app
 # Copy all files from the Coolify checkout directory into the container
 COPY . /app
 
-VOLUME ["/app"]
-
 # Install dependencies
 RUN npm install
 
