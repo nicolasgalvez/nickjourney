@@ -1,7 +1,7 @@
 {
   "6": {
     "inputs": {
-      "text": "A massive interstellar battle unfolds in deep space, with colossal starships exchanging devastating laser fire. Gigantic plasma explosions erupt as sleek fighter crafts weave through debris, dodging bursts of energy beams and homing missiles. The battlefield is illuminated by the glow of pulsar fire, nebula storms, and the distant light of a collapsing star. Capital ships launch waves of drones, while enemy flagships unleash kinetic railgun barrages. In the chaos, an elite squadron executes a daring maneuver, diving through the wreckage of a destroyed cruiser, narrowly avoiding an oncoming torpedo volley. The battle rages across the vast cosmic expanse, warships silhouetted against the radiant galactic core.",
+      "text": "the captain standing on the bridge in retro fashion watching a space battle on the viewscreen",
       "clip": [
         "39",
         1
@@ -142,7 +142,7 @@
   },
   "25": {
     "inputs": {
-      "noise_seed": 334509060463854
+      "noise_seed": 785382776591847
     },
     "class_type": "RandomNoise",
     "_meta": {
@@ -191,7 +191,7 @@
   },
   "38": {
     "inputs": {
-      "seed": 230683421383156,
+      "seed": 985419852842469,
       "steps": 20,
       "cfg": 8,
       "sampler_name": "euler",
@@ -212,11 +212,11 @@
       "lora_01": "spacebattle.safetensors",
       "strength_01": 0.5,
       "lora_02": "Multi-layer geometric space.safetensors",
-      "strength_02": 0.5,
+      "strength_02": 0,
       "lora_03": "Space_Worlds_01__Poetic_fluxbeta4.safetensors",
       "strength_03": 0.5,
-      "lora_04": "monster_flux.safetensors",
-      "strength_04": 0,
+      "lora_04": "retro-futurism-fashion-flux1-dev-v1-000122.safetensors",
+      "strength_04": 0.9,
       "model": [
         "12",
         0

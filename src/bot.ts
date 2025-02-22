@@ -90,7 +90,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
     if(prompt.startsWith("<space>")) {
       workflowFile = 'space.json';
     } else if(prompt.startsWith("<horror>")) {
-      workflowFile = 'lora.json';
+      workflowFile = 'horror.json';
     // } else if(prompt.startsWith("<furry>")) {
     //   workflowFile = 'negative.json';
     }
