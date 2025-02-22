@@ -91,8 +91,8 @@ client.on('interactionCreate', async (interaction: Interaction) => {
       workflowFile = 'space.json';
     } else if(prompt.startsWith("<horror>")) {
       workflowFile = 'horror.json';
-    // } else if(prompt.startsWith("<furry>")) {
-    //   workflowFile = 'negative.json';
+    } else if(prompt.startsWith("<trek>")) {
+      workflowFile = 'trek.json';
     }
     try {
       console.log(`Generating image for prompt: ${prompt}`);
