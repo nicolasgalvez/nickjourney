@@ -41,17 +41,17 @@ const commands = [
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
 
 // Clear bot
-// for (const guildId of allowedGuilds) {
-//   (async () => {
-//     try {
-//         console.log('Removing all guild slash commands...');
-//         await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId), { body: [] });
-//         console.log('Successfully removed all commands.');
-//     } catch (error) {
-//         console.error(error);
-//     }
-//   })();
-// }
+for (const guildId of allowedGuilds) {
+  (async () => {
+    try {
+      console.log('Removing all guild slash commands...');
+      await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId), { body: [] });
+      console.log('Successfully removed all commands.');
+    } catch (error) {
+      console.error(error);
+    }
+  })();
+}
 
 
 
@@ -98,6 +98,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
 
   const { commandName } = interaction;
   await interaction.deferReply(); // Let Discord know the bot is processing
+
   if (commandName === 'loras') {
     await loRAsCommand(interaction);
     return;
