@@ -1,7 +1,8 @@
-import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, AttachmentBuilder, Interaction } from 'discord.js';
+import { CommandInteractionOptionResolver, Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder, AttachmentBuilder, Interaction } from 'discord.js';
 import dotenv from 'dotenv';
 import { generateImage } from "./comfyui";
 import fs from 'fs';
+import { loRAsCommand, availableLoRAs } from './commands/loras';
 
 dotenv.config();
 const allowedGuilds = process.env.ALLOWED_GUILDS?.split(",") || [];
@@ -13,11 +14,28 @@ const commands = [
   new SlashCommandBuilder()
     .setName('scribble')
     .setDescription('Generates an AI image based on your prompt')
+    .setNSFW(true)
     .addStringOption(option =>
       option.setName('prompt')
         .setDescription('Describe what you want the image to be')
-        .setRequired(true)
+        .setRequired(true),
     )
+    .addStringOption(option =>
+      option
+        .setName('scifi')
+        .setDescription('Choose a scifi LoRA')
+        .setRequired(false)
+        .addChoices(
+          // map only scifi loras
+          ...availableLoRAs.filter(lora => lora.category === 'scifi').map(lora => ({
+            name: lora.name,
+            value: lora.name
+          }))
+        )
+    ),
+  new SlashCommandBuilder()
+    .setName('loras')
+    .setDescription('List LoRAs available')
 ].map(command => command.toJSON());
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
@@ -79,25 +97,36 @@ client.on('interactionCreate', async (interaction: Interaction) => {
   }
 
   const { commandName } = interaction;
+  await interaction.deferReply(); // Let Discord know the bot is processing
+  if (commandName === 'loras') {
+    await loRAsCommand(interaction);
+    return;
+  }
 
   if (commandName === 'scribble') {
-    await interaction.deferReply(); // Let Discord know the bot is processing
-    const prompt = interaction.options.getString('prompt') || "a cool futuristic robot with glowing eyes, highly detailed, cinematic lighting";
+    // if prompt has a lora choice, then add it to the prompt
+    let prompt = (interaction.options as CommandInteractionOptionResolver).getString('prompt');
+    const lora = (interaction.options as CommandInteractionOptionResolver).getString('scifi');
+    if (lora) {
+      prompt = `<lora:${lora}:0.7>` + prompt;
+    }
+
     // get workflow from prompt... if it starts with "<space>" then use the space.json workflow
     // if it starts with "<lora>" then use the lora.json workflow
     // if it starts with "<negative>" then use the negative.json workflow
     let workflowFile = 'workflow_api_2.json';
-    if(prompt.startsWith("<space>")) {
+    if (prompt.startsWith("<space>")) {
       workflowFile = 'space.json';
-    } else if(prompt.startsWith("<horror>")) {
+    } else if (prompt.startsWith("<horror>")) {
       workflowFile = 'horror.json';
-    } else if(prompt.startsWith("<trek>")) {
+    } else if (prompt.startsWith("<trek>")) {
       workflowFile = 'trek.json';
     }
     try {
       console.log(`Generating image for prompt: ${prompt}`);
       // Generate the image from the provided prompt
-      const response = await generateImage({ prompt: prompt,
+      const response = await generateImage({
+        prompt: prompt,
         negativePrompt: process.env.NEGATIVE_PROMPT ? process.env.NEGATIVE_PROMPT : "",
         // if prompt starts with "<space>" then use the space.json workflow
         workflowFile: workflowFile
@@ -113,11 +142,12 @@ client.on('interactionCreate', async (interaction: Interaction) => {
 
       // Create Discord attachment
       const attachment = new AttachmentBuilder(filePath);
- 
+
       // Reply with the image
-      await interaction.editReply({ 
+      await interaction.editReply({
         content: `${prompt}`,
-        files: [attachment] });
+        files: [attachment]
+      });
 
       // Delete the file after sending (optional)
       fs.unlinkSync(filePath);
