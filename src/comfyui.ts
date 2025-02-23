@@ -43,6 +43,12 @@ export async function generateImage(options: GenerateImageOptions): Promise<stri
         const workflow = loadWorkflow(path.join(WORKFLOW_PATH, options.workflowFile));
         updateWorkflow(workflow, options.prompt);
         console.log(`using workflow ${options.workflowFile}`);
+        // save modified workflow for debugging to ./history, create if not exists and append timestamp
+        if (!fs.existsSync("./history")) {
+          fs.mkdirSync("./history");
+        }
+        fs.writeFileSync(`./history/${Date.now()}${options.workflowFile}.json`, JSON.stringify(workflow, null, 2)); 
+
         // Send the workflow request
         const promptResponse = await queuePrompt(workflow, clientId);
         const promptId = promptResponse?.prompt_id;
