@@ -116,7 +116,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
  
       // Reply with the image
       await interaction.editReply({ 
-        content: `${response.imageId}: ${prompt}`,
+        content: `${prompt}`,
         files: [attachment] });
 
       // Delete the file after sending (optional)

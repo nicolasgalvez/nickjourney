@@ -3,4 +3,4 @@ dist/
 .env
 .unotes
 .DS_Store
-src/history
+history

@@ -47,7 +47,7 @@ export async function generateImage(options: GenerateImageOptions): Promise<stri
         if (!fs.existsSync("./history")) {
           fs.mkdirSync("./history");
         }
-        fs.writeFileSync(`./history/${Date.now()}${options.workflowFile}.json`, JSON.stringify(workflow, null, 2)); 
+        fs.writeFileSync(`./history/${Date.now()}${options.workflowFile}.json`, JSON.stringify(workflow, null, 2));
 
         // Send the workflow request
         const promptResponse = await queuePrompt(workflow, clientId);
@@ -94,13 +94,18 @@ function updateWorkflow(workflow: any, positivePrompt: string): void {
   );
 
   const kSampler = Object.keys(idToClassType).find((key) => idToClassType[key] === "KSampler");
-  if (!kSampler) throw new Error("❌ No KSampler node found in workflow.");
+  const LoraTagLoader = Object.keys(idToClassType).find((key) => idToClassType[key] === "LoraTagLoader");
 
-  workflow[kSampler]["inputs"]["seed"] = Math.floor(Math.random() * 10 ** 15);
-  const textPrompt = workflow[kSampler]["inputs"]["positive"][0];
-  workflow[textPrompt]["inputs"]["text"] = positivePrompt;
+  if (LoraTagLoader) {
+    workflow[LoraTagLoader]["inputs"]["text"] = positivePrompt;
+  } else if (kSampler) {
+    workflow[kSampler]["inputs"]["seed"] = Math.floor(Math.random() * 10 ** 15);
+    const textPrompt = workflow[kSampler]["inputs"]["positive"][0];
+    workflow[textPrompt]["inputs"]["text"] = positivePrompt;
+  } else {
+    throw new Error("❌ No KSampler or LoraTagLoader node found in the workflow.");
+  }
 }
-
 async function queuePrompt(workflow: any, clientId: string): Promise<any> {
   const response = await axios.post(`http://${COMFYUI_SERVER}/prompt`, {
     prompt: workflow,
@@ -124,7 +129,7 @@ function trackProgress(ws: WebSocket, promptId: string): Promise<void> {
           console.log(`📦 Cached execution: ${message.data}`);
         }
 
-        if (message.type === "executed"  && message.data.prompt_id === promptId) {
+        if (message.type === "executed" && message.data.prompt_id === promptId) {
           console.log("✅ Image generation completed.");
           resolve();
         }
