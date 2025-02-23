@@ -42,7 +42,7 @@ export async function generateImage(options: GenerateImageOptions): Promise<stri
         // Load and update the workflow JSON
         const workflow = loadWorkflow(path.join(WORKFLOW_PATH, options.workflowFile));
         updateWorkflow(workflow, options.prompt);
-
+        console.log(`using workflow ${options.workflowFile}`);
         // Send the workflow request
         const promptResponse = await queuePrompt(workflow, clientId);
         const promptId = promptResponse?.prompt_id;
