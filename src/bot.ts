@@ -12,9 +12,12 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 const commands = [
   new SlashCommandBuilder()
+    .setName('loras')
+    .setDescription('List LoRAs available'),
+
+  new SlashCommandBuilder()
     .setName('scribble')
     .setDescription('Generates an AI image based on your prompt')
-    .setNSFW(true)
     .addStringOption(option =>
       option.setName('prompt')
         .setDescription('Describe what you want the image to be')
@@ -26,16 +29,12 @@ const commands = [
         .setDescription('Choose a scifi LoRA')
         .setRequired(false)
         .addChoices(
-          // map only scifi loras
           ...availableLoRAs.filter(lora => lora.category === 'scifi').map(lora => ({
             name: lora.name,
             value: lora.name
           }))
         )
     ),
-  new SlashCommandBuilder()
-    .setName('loras')
-    .setDescription('List LoRAs available')
 ].map(command => command.toJSON());
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
