@@ -86,7 +86,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
     // get workflow from prompt... if it starts with "<space>" then use the space.json workflow
     // if it starts with "<lora>" then use the lora.json workflow
     // if it starts with "<negative>" then use the negative.json workflow
-    let workflowFile = 'workflow_api.json';
+    let workflowFile = 'workflow_api_2.json';
     if(prompt.startsWith("<space>")) {
       workflowFile = 'space.json';
     } else if(prompt.startsWith("<horror>")) {
