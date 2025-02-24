@@ -9,7 +9,7 @@ export const availableLoRAs = [
     { name: 'CPA', description: 'Cyberpunk Anime Style', alias: 'cpa', category: 'style' },
     { name: 'dark_fantasy_lora', description: 'Dark fantasy themed illustrations', alias: 'darkfantasy', category: 'fantasy' },
     { name: 'david-bowie', description: 'Illustrations featuring David Bowie', alias: 'bowie', category: 'person' },
-    { name: 'detailed_illustration', description: 'Highly detailed illustrations', alias: 'detailed', category: 'style' },
+    { name: 'detailed_illustration', description: 'Highly detailed vector illustrations', alias: 'vector', category: 'style' },
     { name: 'Donald_Trump', description: 'Illustrations featuring Donald Trump', alias: 'trump', category: 'person' },
     { name: 'Dwayne_Johnson_FLUX_LoRA-000160_FP8', description: 'Flux art style featuring Dwayne Johnson', alias: 'therock', category: 'person' },
     { name: 'F1D_George-Takei_v01e07', description: 'Illustrations featuring George Takei', alias: 'takei', category: 'person' },
@@ -35,7 +35,7 @@ export const availableLoRAs = [
 // run the command
 export const loRAsCommand = async (interaction: Interaction) => {
     // format the list of loras into the name and the alias
-    const LoRAsString = availableLoRAs.map(lora => `\`<lora:${lora.name}:0.7>\` (${lora.alias})`).join('\n');
+    const LoRAsString = '\n' + availableLoRAs.map(lora => `\`<lora:${lora.name}:0.7>\` (${lora.description})`).join('\n');
     // send the string to the channel
     await interaction.editReply(LoRAsString);
 }

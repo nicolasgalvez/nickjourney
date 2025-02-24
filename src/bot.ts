@@ -25,35 +25,45 @@ const commands = [
     )
     .addStringOption(option =>
       option
-        .setName('scifi')
-        .setDescription('Choose a scifi LoRA')
+        .setName('aspect')
+        .setDescription('Choose an aspect ratio')
         .setRequired(false)
         .addChoices(
-          ...availableLoRAs.filter(lora => lora.category === 'scifi').map(lora => ({
-            name: lora.name,
-            value: lora.name
-          }))
-        )
-    ),
+          { name: 'Portrait', value: 'portrait' },
+          { name: 'Landscape', value: 'landscape' },
+          { name: '2x Tall', value: 'tall' },
+          { name: '2x Wide', value: 'wide' },
+
+        ),
+    )
+  // .addStringOption(option =>
+  //   option
+  //     .setName('scifi')
+  //     .setDescription('Choose a scifi LoRA')
+  //     .setRequired(false)
+  //     .addChoices(
+  //       ...availableLoRAs.filter(lora => lora.category === 'scifi').map(lora => ({
+  //         name: lora.name,
+  //         value: lora.description
+  //       }))
+  //     )
+  // ),
 ].map(command => command.toJSON());
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
 
 // Clear bot
-for (const guildId of allowedGuilds) {
-  (async () => {
-    try {
-      console.log('Removing all guild slash commands...');
-      await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId), { body: [] });
-      console.log('Successfully removed all commands.');
-    } catch (error) {
-      console.error(error);
-    }
-  })();
-}
-
-
-
+// for (const guildId of allowedGuilds) {
+//   (async () => {
+//     try {
+//       console.log('Removing all guild slash commands...');
+//       await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId), { body: [] });
+//       console.log('Successfully removed all commands.');
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   })();
+// }
 
 (async () => {
   try {
@@ -129,7 +139,8 @@ client.on('interactionCreate', async (interaction: Interaction) => {
         prompt: prompt,
         negativePrompt: process.env.NEGATIVE_PROMPT ? process.env.NEGATIVE_PROMPT : "",
         // if prompt starts with "<space>" then use the space.json workflow
-        workflowFile: workflowFile
+        workflowFile: workflowFile,
+        interaction: interaction,
       });
       console.log(response)
       // Convert base64 to Buffer

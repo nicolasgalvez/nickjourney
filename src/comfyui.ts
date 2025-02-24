@@ -6,6 +6,9 @@ import path from "path";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
 
+// define a Workflow type that is any kind of json object
+type Workflow = { [key: string]: any };
+
 // ✅ Convert `import.meta.url` to `__dirname`
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,6 +31,7 @@ interface GenerateImageOptions {
   negativePrompt?: string;
   workflowFile?: string;
   loras?: string[];
+  interaction?: any;
 }
 
 export async function generateImage(options: GenerateImageOptions): Promise<string | null> {
@@ -40,7 +44,14 @@ export async function generateImage(options: GenerateImageOptions): Promise<stri
         console.log("✅ WebSocket connected to ComfyUI");
 
         // Load and update the workflow JSON
-        const workflow = loadWorkflow(path.join(WORKFLOW_PATH, options.workflowFile));
+        const workflow = loadWorkflow(path.join(WORKFLOW_PATH, options.workflowFile)) as Workflow;
+
+        const aspectRatio = options.interaction.options.getString("aspect");
+        // update aspect ratio
+        if (aspectRatio) {
+          updateAspectRatio(workflow, aspectRatio);
+        }
+
         updateWorkflow(workflow, options.prompt);
         console.log(`using workflow ${options.workflowFile}`);
         // save modified workflow for debugging to ./history, create if not exists and append timestamp
@@ -88,7 +99,36 @@ function loadWorkflow(workflowPath: string): any {
   return JSON.parse(fs.readFileSync(workflowPath, "utf-8"));
 }
 
-function updateWorkflow(workflow: any, positivePrompt: string): void {
+function updateAspectRatio(workflow: Workflow, aspectRatio: 'portrait' | 'landscape' | 'tall' | 'wide'): void {
+  const idToClassType = Object.fromEntries(
+    Object.entries(workflow).map(([id, details]: [string, any]) => [id, details.class_type])
+  );
+  // we need to update 2 nodes EmptySD3LatentImage, and ModelSamplingFlux
+  const emptySD3LatentImage = Object.keys(idToClassType).find((key) => idToClassType[key] === "EmptySD3LatentImage");
+  const modelSamplingFlux = Object.keys(idToClassType).find((key) => idToClassType[key] === "ModelSamplingFlux");
+  // options are portrait and landscape
+  if (aspectRatio === "portrait") {
+    workflow[emptySD3LatentImage]["inputs"]["height"] = workflow[emptySD3LatentImage]["inputs"]["height"] * 1.5;
+    workflow[modelSamplingFlux]["inputs"]["height"] = workflow[modelSamplingFlux]["inputs"]["height"] * 1.5;
+  }
+  if (aspectRatio === "landscape") {
+    workflow[emptySD3LatentImage]["inputs"]["width"] = workflow[emptySD3LatentImage]["inputs"]["width"] * 1.5;
+    workflow[modelSamplingFlux]["inputs"]["width"] = workflow[modelSamplingFlux]["inputs"]["width"] * 1.5;
+  }
+  if (aspectRatio === "tall") {
+    workflow[emptySD3LatentImage]["inputs"]["height"] = workflow[emptySD3LatentImage]["inputs"]["height"] * 2;
+    workflow[modelSamplingFlux]["inputs"]["height"] = workflow[modelSamplingFlux]["inputs"]["height"] * 2;
+  }
+  if (aspectRatio === "wide") {
+    workflow[emptySD3LatentImage]["inputs"]["width"] = workflow[emptySD3LatentImage]["inputs"]["width"] * 2;
+    workflow[modelSamplingFlux]["inputs"]["width"] = workflow[modelSamplingFlux]["inputs"]["width"] * 2;
+  }
+  console.log(workflow[emptySD3LatentImage]["inputs"]["width"], workflow[emptySD3LatentImage]["inputs"]["height"]);
+  console.log(workflow[modelSamplingFlux]["inputs"]["width"], workflow[modelSamplingFlux]["inputs"]["height"]);
+
+}
+
+function updateWorkflow(workflow: Workflow, positivePrompt: string): void {
   const idToClassType = Object.fromEntries(
     Object.entries(workflow).map(([id, details]: [string, any]) => [id, details.class_type])
   );
@@ -106,6 +146,8 @@ function updateWorkflow(workflow: any, positivePrompt: string): void {
     throw new Error("❌ No KSampler or LoraTagLoader node found in the workflow.");
   }
 }
+
+
 async function queuePrompt(workflow: any, clientId: string): Promise<any> {
   const response = await axios.post(`http://${COMFYUI_SERVER}/prompt`, {
     prompt: workflow,
