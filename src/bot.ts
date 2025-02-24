@@ -8,47 +8,61 @@ dotenv.config();
 const allowedGuilds = process.env.ALLOWED_GUILDS?.split(",") || [];
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+// loop over availableLoRAs and build a new command for each category
+const lorabyCategory = availableLoRAs.reduce((acc, lora) => {
+  if (!acc[lora.category]) {
+    acc[lora.category] = [];
+  }
+  acc[lora.category].push(lora);
+  return acc;
+}, {} as { [key: string]: any[] });
+
+let scribble = new SlashCommandBuilder()
+  .setName('scribble')
+  .setDescription('Generates an AI image based on your prompt')
+  .addStringOption(option =>
+    option.setName('prompt')
+      .setDescription('Describe what you want the image to be')
+      .setRequired(true),
+  ).addStringOption(option =>
+    option
+      .setName('aspect')
+      .setDescription('Choose an aspect ratio')
+      .setRequired(false)
+      .addChoices(
+        { name: 'Portrait', value: 'portrait' },
+        { name: 'Landscape', value: 'landscape' },
+        { name: '2x Tall', value: 'tall' },
+        { name: '2x Wide', value: 'wide' },
+      ),
+  )
+
+Object.keys(lorabyCategory).map(category => {
+  scribble.addStringOption(option =>
+    option
+      .setName(category)
+      .setDescription(`Choose a ${category} LoRA`)
+      .setRequired(false)
+      .addChoices(
+        ...lorabyCategory[category].map(lora => ({
+          name: lora.name,
+          value: lora.name
+        }))
+      )
+  )
+})
+
+
 
 
 const commands = [
+  scribble,
   new SlashCommandBuilder()
     .setName('loras')
     .setDescription('List LoRAs available'),
-
-  new SlashCommandBuilder()
-    .setName('scribble')
-    .setDescription('Generates an AI image based on your prompt')
-    .addStringOption(option =>
-      option.setName('prompt')
-        .setDescription('Describe what you want the image to be')
-        .setRequired(true),
-    )
-    .addStringOption(option =>
-      option
-        .setName('aspect')
-        .setDescription('Choose an aspect ratio')
-        .setRequired(false)
-        .addChoices(
-          { name: 'Portrait', value: 'portrait' },
-          { name: 'Landscape', value: 'landscape' },
-          { name: '2x Tall', value: 'tall' },
-          { name: '2x Wide', value: 'wide' },
-
-        ),
-    )
-  // .addStringOption(option =>
-  //   option
-  //     .setName('scifi')
-  //     .setDescription('Choose a scifi LoRA')
-  //     .setRequired(false)
-  //     .addChoices(
-  //       ...availableLoRAs.filter(lora => lora.category === 'scifi').map(lora => ({
-  //         name: lora.name,
-  //         value: lora.description
-  //       }))
-  //     )
-  // ),
-].map(command => command.toJSON());
+  // group loras by category and add a string option for each group addStringOption
+]
+commands.map(command => command.toJSON());
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
 
@@ -116,10 +130,14 @@ client.on('interactionCreate', async (interaction: Interaction) => {
   if (commandName === 'scribble') {
     // if prompt has a lora choice, then add it to the prompt
     let prompt = (interaction.options as CommandInteractionOptionResolver).getString('prompt');
-    const lora = (interaction.options as CommandInteractionOptionResolver).getString('scifi');
-    if (lora) {
-      prompt = `<lora:${lora}:0.7>` + prompt;
-    }
+
+    // loop through lora options and add them to the prompt if they exist
+    Object.keys(lorabyCategory).map(category => {
+      const lora = (interaction.options as CommandInteractionOptionResolver).getString(category);
+      if (lora) {
+        prompt = `<lora:${lora}:0.7>` + prompt;
+      }
+    })
 
     // get workflow from prompt... if it starts with "<space>" then use the space.json workflow
     // if it starts with "<lora>" then use the lora.json workflow
