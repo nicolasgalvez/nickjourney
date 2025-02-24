@@ -45,7 +45,7 @@ Object.keys(lorabyCategory).map(category => {
       .setRequired(false)
       .addChoices(
         ...lorabyCategory[category].map(lora => ({
-          name: lora.name,
+          name: lora.name + " - " + lora.description,
           value: lora.name
         }))
       )
