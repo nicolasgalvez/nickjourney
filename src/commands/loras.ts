@@ -32,13 +32,13 @@ export const availableLoRAs = [
     { name: 'zy_horror_monsters_flux', description: 'Horror monsters themed Flux art by zy', alias: 'zyhorror', category: 'horror' },
     { name: 'Cyber_Room', description: 'Cyber room themed illustrations', alias: 'cyberroom', category: 'scifi' },
     { name: 'Vaporwave_Graphic-e5', description: 'Vaporwave graphic style', alias: 'vaporwave', category: 'style' },
-    { name: 'ral-watce-flux', description: 'watches', alias: 'watches', category: 'misc' },
+    { name: 'ral-watce-flux', description: 'watches', alias: 'watches', category: 'fantasy' },
     { name: 'metal_hurlant_v1', description: 'Metal Hurlant comic style', alias: 'metalhurlant', category: 'comic' },
-    { name: 'ral-crystalz_flux', description: 'crystals', alias: 'crystals', category: 'misc' },
+    { name: 'ral-crystalz_flux', description: 'crystals', alias: 'crystals', category: 'fantasy' },
     { name: 'FL-bailing-24-0906Fire Spirit-000008', description: 'Fire spirit themed illustrations', alias: 'firespirit', category: 'fantasy' },
     { name: 'Illustration_Style_IV', description: 'Watercolorish', alias: 'illustrationiv', category: 'style' },
     { name: 'Cyber_Background', description: 'Cyber backgrounds', alias: 'cyberbackground', category: 'scifi' },
-    { name: 'ral-dissolve-flux', description: 'dissolve effects', alias: 'dissolve', category: 'misc' },
+    { name: 'ral-dissolve-flux', description: 'dissolving object effects', alias: 'dissolve', category: 'fantasy' },
     { name: 'zyd232_Ink_Style_Flux1D_v1_1', description: 'Ink', alias: 'inkstyle', category: 'style' },
     { name: 'FLUX_BIG_BULGE', description: 'big bulges, by popular demand', alias: 'bigbulge', category: 'body' },
     { name: '1980s_Big_Hair', description: '1980s big hair style', alias: 'bighair', category: 'style' },
@@ -50,6 +50,11 @@ export const availableLoRAs = [
     { name: 'Sci-fi_env_flux', description: 'Sci-fi environment style', alias: 'scifienv', category: 'scifi' },
     { name: 'papiyan-lora', description: '6 arms Papiyan style', alias: 'papiyan', category: 'body' },
     { name: '4armsfluxv2', description: 'Four arms style', alias: 'fourarms', category: 'body' },
+    { name: 'CharacterDesignSheetQuiron_FLUX', description: 'Character design sheet for Quiron', alias: 'quiron', category: 'character' },
+    { name: 'Shrek', description: 'Illustrations featuring Shrek', alias: 'shrek', category: 'character' },
+    { name: 'Unsettling_V2dot0-000008', description: 'Unsettling themed illustrations', alias: 'unsettling', category: 'horror' },
+    { name: 'Ghibli', description: 'Nausicaä style', alias: 'nausicaa', category: 'style' },
+    { name: 'CharacterDesignStyle', description: 'Character design style illustrations', alias: 'characterdesign', category: 'style' },
 ];
 
 // run the command
