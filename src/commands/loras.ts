@@ -58,6 +58,8 @@ export const availableLoRAs = [
     { name: 'flux-kirk', description: 'Character design style illustrations', alias: 'characterdesign', category: 'style' },
     { name: 'Optimazed-TurboFLUX-Accelerater_PAseer', description: '?', alias: 'optimized', category: 'tools' },
     { name: 'Furry Enhancer Flux NSFW Mode V1', description: 'Anthropomorphic', alias: 'anthropomorphic', category: 'body' },
+    { name: 'Afrofuturism-000001', description: 'Afrofuturism 1', alias: 'Afrofuturism1', category: 'scifi' },
+    { name: 'dvr-afrofuturism-flux', description: 'Afrofuturism 2', alias: 'Afrofuturism2', category: 'scifi' },
 ];
 
 // run the command
