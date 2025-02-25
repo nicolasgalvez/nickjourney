@@ -54,7 +54,10 @@ export const availableLoRAs = [
     { name: 'Shrek', description: 'Illustrations featuring Shrek', alias: 'shrek', category: 'character' },
     { name: 'Unsettling_V2dot0-000008', description: 'Unsettling themed illustrations', alias: 'unsettling', category: 'horror' },
     { name: 'Ghibli', description: 'Nausicaä style', alias: 'nausicaa', category: 'style' },
-    { name: 'CharacterDesignStyle', description: 'Character design style illustrations', alias: 'characterdesign', category: 'style' },
+    { name: 'Xenomorph', description: 'Aliens', alias: 'xenomorph', category: 'scifi' },
+    { name: 'flux-kirk', description: 'Character design style illustrations', alias: 'characterdesign', category: 'style' },
+    { name: 'Optimazed-TurboFLUX-Accelerater_PAseer', description: '?', alias: 'optimized', category: 'tools' },
+    { name: 'Furry Enhancer Flux NSFW Mode V1', description: 'Anthropomorphic', alias: 'anthropomorphic', category: 'body' },
 ];
 
 // run the command
