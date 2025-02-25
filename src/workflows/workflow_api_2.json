@@ -1,14 +1,8 @@
 {
   "8": {
     "inputs": {
-      "samples": [
-        "13",
-        0
-      ],
-      "vae": [
-        "10",
-        0
-      ]
+      "samples": ["13", 0],
+      "vae": ["10", 0]
     },
     "class_type": "VAEDecode",
     "_meta": {
@@ -18,10 +12,7 @@
   "9": {
     "inputs": {
       "filename_prefix": "ComfyUI",
-      "images": [
-        "8",
-        0
-      ]
+      "images": ["8", 0]
     },
     "class_type": "SaveImage",
     "_meta": {
@@ -61,26 +52,11 @@
   },
   "13": {
     "inputs": {
-      "noise": [
-        "25",
-        0
-      ],
-      "guider": [
-        "22",
-        0
-      ],
-      "sampler": [
-        "16",
-        0
-      ],
-      "sigmas": [
-        "17",
-        0
-      ],
-      "latent_image": [
-        "27",
-        0
-      ]
+      "noise": ["25", 0],
+      "guider": ["22", 0],
+      "sampler": ["16", 0],
+      "sigmas": ["17", 0],
+      "latent_image": ["27", 0]
     },
     "class_type": "SamplerCustomAdvanced",
     "_meta": {
@@ -101,10 +77,7 @@
       "scheduler": "simple",
       "steps": 20,
       "denoise": 1,
-      "model": [
-        "30",
-        0
-      ]
+      "model": ["30", 0]
     },
     "class_type": "BasicScheduler",
     "_meta": {
@@ -113,14 +86,8 @@
   },
   "22": {
     "inputs": {
-      "model": [
-        "30",
-        0
-      ],
-      "conditioning": [
-        "26",
-        0
-      ]
+      "model": ["30", 0],
+      "conditioning": ["26", 0]
     },
     "class_type": "BasicGuider",
     "_meta": {
@@ -139,10 +106,7 @@
   "26": {
     "inputs": {
       "guidance": 3.5,
-      "conditioning": [
-        "43",
-        0
-      ]
+      "conditioning": ["43", 0]
     },
     "class_type": "FluxGuidance",
     "_meta": {
@@ -166,10 +130,7 @@
       "base_shift": 0.5,
       "width": 512,
       "height": 512,
-      "model": [
-        "42",
-        0
-      ]
+      "model": ["42", 0]
     },
     "class_type": "ModelSamplingFlux",
     "_meta": {
@@ -184,10 +145,7 @@
       "sampler_name": "euler",
       "scheduler": "normal",
       "denoise": 1,
-      "positive": [
-        "43",
-        0
-      ]
+      "positive": ["43", 0]
     },
     "class_type": "KSampler",
     "_meta": {
@@ -197,14 +155,8 @@
   "42": {
     "inputs": {
       "text": "8k, RAW photo, masterpiece, high detail, (best quality), (ultra realistic:1.4), realistic skin texture, analog film, sharp focus, high quality, masterpiece, high definition, ultra detailed <lora:Detailed_Vector_Illustration_-_Flux:1>\n\ncute anime girl with massive fluffy fennec ears and a big fluffy tail blonde messy long hair blue eyes wearing a maid outfit with a long black gold leaf pattern dress and a white apron mouth open holding a fancy black forest cake with candles on top in the kitchen of an old dark Victorian mansion lit by candlelight with a bright window to the foggy forest and very expensive stuff everywhere",
-      "model": [
-        "12",
-        0
-      ],
-      "clip": [
-        "11",
-        0
-      ]
+      "model": ["12", 0],
+      "clip": ["11", 0]
     },
     "class_type": "LoraTagLoader",
     "_meta": {
@@ -213,14 +165,8 @@
   },
   "43": {
     "inputs": {
-      "text": [
-        "42",
-        2
-      ],
-      "clip": [
-        "42",
-        1
-      ]
+      "text": ["42", 2],
+      "clip": ["42", 1]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {

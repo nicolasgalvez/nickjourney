@@ -1,33 +1,48 @@
 {
-	"type": "module",
-	"scripts": {
-		"start": "npx tsx --watch src/index.ts",
-		"dev": "tsx --inspect-brk --watch src/index.ts"
-	},
-	"dependencies": {
-		"@discordjs/rest": "^2.4.2",
-		"@hey-api/client-fetch": "^0.8.1",
-		"axios": "^1.7.9",
-		"body-parser": "^2.0.2",
-		"cors": "^2.8.5",
-		"discord.js": "^14.17.3",
-		"dotenv": "^16.4.7",
-		"express": "^5.0.1",
-		"express-session": "^1.18.1",
-		"passport": "^0.7.0",
-		"passport-google-oauth20": "^2.0.0",
-		"tsx": "^4.19.3",
-		"uuid": "^11.1.0"
-	},
-	"devDependencies": {
-		"@hey-api/openapi-ts": "^0.61.2",
-		"@types/express": "^5.0.0",
-		"@types/express-session": "^1.18.1",
-		"@types/node": "^22.13.1",
-		"@types/passport": "^1.0.17",
-		"@types/passport-google-oauth20": "^2.0.16",
-		"@types/uuid": "^10.0.0",
-		"ts-node": "^10.9.2",
-		"typescript": "^5.7.3"
-	}
+  "type": "module",
+  "scripts": {
+    "start": "npx tsx --watch src/index.ts",
+    "dev": "tsx --inspect-brk --watch src/index.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@discordjs/rest": "^2.4.2",
+    "@hey-api/client-fetch": "^0.8.1",
+    "axios": "^1.7.9",
+    "body-parser": "^2.0.2",
+    "cors": "^2.8.5",
+    "discord.js": "^14.17.3",
+    "dotenv": "^16.4.7",
+    "express": "^5.0.1",
+    "express-session": "^1.18.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "tsx": "^4.19.3",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@hey-api/openapi-ts": "^0.61.2",
+    "@types/express": "^5.0.0",
+    "@types/express-session": "^1.18.1",
+    "@types/node": "^22.13.1",
+    "@types/passport": "^1.0.17",
+    "@types/passport-google-oauth20": "^2.0.16",
+    "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "prettier": "^3.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
 }

@@ -1,31 +1,35 @@
-import express from 'express';
-import passport from 'passport';
+import express from 'express'
+import passport from 'passport'
 
-const router = express.Router();
+const router = express.Router()
 
 // Middleware to check if the user is authenticated
 function isAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
-    return next();
+    return next()
   }
-  res.redirect('/auth/google');
+  res.redirect('/auth/google')
 }
 
 // Route to start OAuth authentication
-router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get(
+  '/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+)
 
 // Callback route for Google to redirect to
-router.get('/auth/google/callback', 
+router.get(
+  '/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   (req, res) => {
     // Successful authentication, redirect home.
-    res.redirect('/dashboard');
+    res.redirect('/dashboard')
   }
-);
+)
 
 // Restricted route
 router.get('/restricted', isAuthenticated, (req, res) => {
-  res.send('This is a restricted route. You are authenticated.');
-});
+  res.send('This is a restricted route. You are authenticated.')
+})
 
-export default router;
+export default router

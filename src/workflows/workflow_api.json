@@ -2,10 +2,7 @@
   "6": {
     "inputs": {
       "text": "test",
-      "clip": [
-        "11",
-        0
-      ]
+      "clip": ["11", 0]
     },
     "class_type": "CLIPTextEncode",
     "_meta": {
@@ -14,14 +11,8 @@
   },
   "8": {
     "inputs": {
-      "samples": [
-        "13",
-        0
-      ],
-      "vae": [
-        "10",
-        0
-      ]
+      "samples": ["13", 0],
+      "vae": ["10", 0]
     },
     "class_type": "VAEDecode",
     "_meta": {
@@ -31,10 +22,7 @@
   "9": {
     "inputs": {
       "filename_prefix": "ComfyUI",
-      "images": [
-        "8",
-        0
-      ]
+      "images": ["8", 0]
     },
     "class_type": "SaveImage",
     "_meta": {
@@ -74,26 +62,11 @@
   },
   "13": {
     "inputs": {
-      "noise": [
-        "25",
-        0
-      ],
-      "guider": [
-        "22",
-        0
-      ],
-      "sampler": [
-        "16",
-        0
-      ],
-      "sigmas": [
-        "17",
-        0
-      ],
-      "latent_image": [
-        "27",
-        0
-      ]
+      "noise": ["25", 0],
+      "guider": ["22", 0],
+      "sampler": ["16", 0],
+      "sigmas": ["17", 0],
+      "latent_image": ["27", 0]
     },
     "class_type": "SamplerCustomAdvanced",
     "_meta": {
@@ -114,10 +87,7 @@
       "scheduler": "simple",
       "steps": 20,
       "denoise": 1,
-      "model": [
-        "30",
-        0
-      ]
+      "model": ["30", 0]
     },
     "class_type": "BasicScheduler",
     "_meta": {
@@ -126,14 +96,8 @@
   },
   "22": {
     "inputs": {
-      "model": [
-        "30",
-        0
-      ],
-      "conditioning": [
-        "26",
-        0
-      ]
+      "model": ["30", 0],
+      "conditioning": ["26", 0]
     },
     "class_type": "BasicGuider",
     "_meta": {
@@ -152,10 +116,7 @@
   "26": {
     "inputs": {
       "guidance": 3.5,
-      "conditioning": [
-        "6",
-        0
-      ]
+      "conditioning": ["6", 0]
     },
     "class_type": "FluxGuidance",
     "_meta": {
@@ -179,10 +140,7 @@
       "base_shift": 0.5,
       "width": 512,
       "height": 512,
-      "model": [
-        "12",
-        0
-      ]
+      "model": ["12", 0]
     },
     "class_type": "ModelSamplingFlux",
     "_meta": {
@@ -197,10 +155,7 @@
       "sampler_name": "euler",
       "scheduler": "normal",
       "denoise": 1,
-      "positive": [
-        "6",
-        0
-      ]
+      "positive": ["6", 0]
     },
     "class_type": "KSampler",
     "_meta": {

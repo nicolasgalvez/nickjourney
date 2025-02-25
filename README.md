@@ -6,26 +6,28 @@ After looking at the terrifying costs to host a cloud GPU, I set up [stable-diff
 I already had a [Coolify](https://coolify.io/) server running where I deploy test projects, so I started with a hello world chatbot and went from there.
 
 # The Setup
+
 ![Networking Diagram for my setup](https://raw.githubusercontent.com/nicolasgalvez/discord-invoke/a8fc3a0d7717388a9043de95476349d2441d2217/.github/assets/Discord%20Bot.jpg)
 Network
 
-* Cloudflare tunnel to my old PC. No exposing ports and IPs like in the old days.
-* Cloudflare App to connect to the tunnel with
-    * Service auth policy using an app ID/Key
+- Cloudflare tunnel to my old PC. No exposing ports and IPs like in the old days.
+- Cloudflare App to connect to the tunnel with
+  - Service auth policy using an app ID/Key
 
 Discord App
 
-* Coolify Server hosting an Express app
-    * Express handles the `/scribble` command from Discord, and sends the generated image back to chat.
-* Create a private Discord app with guild\_id (your server id) permissions
+- Coolify Server hosting an Express app
+  - Express handles the `/scribble` command from Discord, and sends the generated image back to chat.
+- Create a private Discord app with guild_id (your server id) permissions
 
 Home PC
 
-* Stable Diffusion webUI on Python
-* LAN access to the webUI
-* API endpoints enabled in Stable Diffusion webUI
+- Stable Diffusion webUI on Python
+- LAN access to the webUI
+- API endpoints enabled in Stable Diffusion webUI
 
 ## Why so complicated?
+
 Good question, it doesn't need to be. You can run your discord bot on localhost of the same machine as the image generator.
 
 I wanted to learn more about Coolify and Cloudflare, CI/CD, and Docker. Plus it just feels like the less running in my house, the better for security.
