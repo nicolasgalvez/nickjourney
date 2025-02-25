@@ -63,6 +63,7 @@ export const availableLoRAs = [
     { name: 'Steampunk Concept Art - XL Pony V1.0', description: 'Steampunk art', alias: 'steampunkart', category: 'steampunk' },
     { name: 'Clothing - SteamPunk Armor', description: 'Steampunk armor', alias: 'steampunkmen', category: 'steampunk' },
     { name: 'edgSteampunk', description: 'Steampunk women', alias: 'steampunkwomen', category: 'steampunk' },
+    { name: 'flux-kirk', description: 'Kirk', alias: 'kirk', category: 'character' },
 ];
 
 // run the command
