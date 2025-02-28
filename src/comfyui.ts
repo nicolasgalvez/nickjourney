@@ -33,6 +33,9 @@ interface GenerateImageOptions {
   workflowFile?: string
   loRAs?: string[]
   interaction?: Interaction
+  guidance?: number
+  steps?: number
+  seed?: number
 }
 
 export async function generateImage(
@@ -55,6 +58,10 @@ export async function generateImage(
         // update aspect ratio
         if (aspectRatio) {
           updateAspectRatio(workflow, aspectRatio)
+        }
+        const guidance = options.interaction.options.getString('guidance')
+        if (guidance) {
+          updateGuidance(workflow, guidance)
         }
 
         updateWorkflow(workflow, options.prompt)
@@ -159,6 +166,26 @@ function updateAspectRatio(
   )
 }
 
+function updateGuidance(
+  workflow: Workflow,
+  guidance: number
+): void {
+  const idToClassType = Object.fromEntries(
+    Object.entries(workflow).map(([id, details]: [string, any]) => [
+      id,
+      details.class_type,
+    ])
+  )
+  const kSampler = Object.keys(idToClassType).find(
+    (key) => idToClassType[key] === 'FluxGuidance'
+  )
+  if (kSampler) {
+    workflow[kSampler]['inputs']['guidance'] = guidance
+  } else {
+    throw new Error('❌ No KSampler node found in the workflow.')
+  }
+}
+
 function updateWorkflow(workflow: Workflow, positivePrompt: string): void {
   const idToClassType = Object.fromEntries(
     Object.entries(workflow).map(([id, details]: [string, any]) => [
@@ -186,6 +213,8 @@ function updateWorkflow(workflow: Workflow, positivePrompt: string): void {
     )
   }
 }
+
+
 
 async function queuePrompt(workflow: any, clientId: string): Promise<any> {
   const response = await axios.post(`http://${COMFYUI_SERVER}/prompt`, {

@@ -50,6 +50,18 @@ const scribble = new SlashCommandBuilder()
         { name: '2x Wide', value: 'wide' }
       )
   )
+  .addStringOption((option) =>
+    option
+      .setName('guidance')
+      .setDescription('How creative should the image be?')
+      .setRequired(false)
+      .addChoices(
+        { name: 'Normal', value: '8.0' },
+        { name: 'Creative', value: '4.0' },
+        { name: 'Loose', value: '2.5' },
+        { name: 'Crazy', value: '1.0' }
+      )
+  )
 
 Object.keys(lorabyCategory).map((category) => {
   scribble.addStringOption((option) =>
@@ -77,50 +89,50 @@ commandsList.map((command) => command.toJSON())
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN)
 
-// Clear bot
-// for (const guildId of allowedGuilds) {
-//   (async () => {
-//     try {
-//       console.log('Removing all guild slash commands...');
-//       await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId), { body: [] });
-//       console.log('Successfully removed all commands.');
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   })();
-// }
+  // Clear bot
+  // for (const guildId of allowedGuilds) {
+  //   (async () => {
+  //     try {
+  //       console.log('Removing all guild slash commands...');
+  //       await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, guildId), { body: [] });
+  //       console.log('Successfully removed all commands.');
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   })();
+  // }
 
-;(async () => {
-  try {
-    console.log('Started refreshing application (/) commands.')
+  ; (async () => {
+    try {
+      console.log('Started refreshing application (/) commands.')
 
-    // Parse allowed guilds from .env
+      // Parse allowed guilds from .env
 
-    for (const guildId of allowedGuilds) {
-      try {
-        await rest.put(
-          Routes.applicationGuildCommands(
-            process.env.CLIENT_ID,
-            guildId.trim()
-          ), // Trim to avoid spaces
-          { body: commandsList }
-        )
-        console.log(`Successfully reloaded commands for guild: ${guildId}`)
-      } catch (error) {
-        console.error(
-          `Failed to register commands for guild ${guildId}:`,
-          error
-        )
+      for (const guildId of allowedGuilds) {
+        try {
+          await rest.put(
+            Routes.applicationGuildCommands(
+              process.env.CLIENT_ID,
+              guildId.trim()
+            ), // Trim to avoid spaces
+            { body: commandsList }
+          )
+          console.log(`Successfully reloaded commands for guild: ${guildId}`)
+        } catch (error) {
+          console.error(
+            `Failed to register commands for guild ${guildId}:`,
+            error
+          )
+        }
       }
-    }
 
-    console.log(
-      'Successfully reloaded application (/) commands for all allowed guilds.'
-    )
-  } catch (error) {
-    console.error(error)
-  }
-})()
+      console.log(
+        'Successfully reloaded application (/) commands for all allowed guilds.'
+      )
+    } catch (error) {
+      console.error(error)
+    }
+  })()
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user?.tag}!`)
