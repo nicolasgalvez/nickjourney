@@ -12,6 +12,7 @@ import dotenv from 'dotenv'
 import { generateImage } from './comfyui'
 import fs from 'fs'
 import { command as LorasCommand } from './commands/loras'
+import { generatePrompt } from './llm'
 
 dotenv.config()
 const allowedGuilds = process.env.ALLOWED_GUILDS?.split(',') || []
@@ -28,7 +29,15 @@ const lorabyCategory = LorasCommand.availableLoRAs.reduce(
   },
   {} as { [key: string]: any[] }
 )
-
+const scrble = new SlashCommandBuilder()
+  .setName('scrble')
+  .setDescription('Generates an AI image based on your terrible short prompt')
+  .addStringOption((option) =>
+    option
+      .setName('prompt')
+      .setDescription('Describe what you want the image to be')
+      .setRequired(false)
+  )
 const scribble = new SlashCommandBuilder()
   .setName('scribble')
   .setDescription('Generates an AI image based on your prompt')
@@ -56,11 +65,17 @@ const scribble = new SlashCommandBuilder()
       .setDescription('How creative should the image be?')
       .setRequired(false)
       .addChoices(
-        { name: 'Normal', value: '8.0' },
-        { name: 'Creative', value: '4.0' },
-        { name: 'Loose', value: '2.5' },
-        { name: 'Crazy', value: '1.0' }
+        { name: 'Normal', value: '3.5' },
+        { name: 'Creative', value: '1.5' },
+        { name: 'Loose', value: '1' },
+        { name: 'Crazy', value: '0.2' }
       )
+  )
+  .addBooleanOption((option) =>
+    option
+      .setName('lazy')
+      .setDescription('Are you a lazy person?')
+      .setRequired(false)
   )
 
 Object.keys(lorabyCategory).map((category) => {
@@ -80,6 +95,7 @@ Object.keys(lorabyCategory).map((category) => {
 
 const commandsList = [
   scribble,
+  scrble,
   new SlashCommandBuilder()
     .setName('loras')
     .setDescription('List LoRAs available'),
@@ -160,7 +176,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
     return
   }
 
-  if (commandName === 'scribble') {
+  if (commandName === 'scribble' || commandName === 'scrble') {
     // if prompt has a lora choice, then add it to the prompt
     let prompt = (
       interaction.options as CommandInteractionOptionResolver
@@ -175,6 +191,10 @@ client.on('interactionCreate', async (interaction: Interaction) => {
         prompt = `<lora:${lora}:0.7>` + prompt
       }
     })
+    if (commandName === 'scrble') {
+      // Generate a prompt from the input
+      prompt = await generatePrompt(prompt || '') // if prompt is null, use empty string
+    }
 
     // get workflow from prompt... if it starts with "<space>" then use the space.json workflow
     // if it starts with "<lora>" then use the lora.json workflow

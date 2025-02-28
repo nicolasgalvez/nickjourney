@@ -177,10 +177,10 @@ function updateGuidance(
     ])
   )
   const kSampler = Object.keys(idToClassType).find(
-    (key) => idToClassType[key] === 'FluxGuidance'
+    (key) => idToClassType[key] === 'kSampler'
   )
   if (kSampler) {
-    workflow[kSampler]['inputs']['guidance'] = guidance
+    workflow[kSampler]['inputs']['cfg'] = guidance
   } else {
     throw new Error('❌ No KSampler node found in the workflow.')
   }
