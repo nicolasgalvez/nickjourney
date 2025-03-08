@@ -200,6 +200,9 @@ function updateWorkflow(workflow: Workflow, positivePrompt: string): void {
   const LoraTagLoader = Object.keys(idToClassType).find(
     (key) => idToClassType[key] === 'LoraTagLoader'
   )
+  const CLIPTextEncode = Object.keys(idToClassType).find(
+    (key) => idToClassType[key] === 'CLIPTextEncode'
+  )
 
   if (LoraTagLoader) {
     workflow[LoraTagLoader]['inputs']['text'] = positivePrompt
@@ -207,6 +210,8 @@ function updateWorkflow(workflow: Workflow, positivePrompt: string): void {
     workflow[kSampler]['inputs']['seed'] = Math.floor(Math.random() * 10 ** 15)
     const textPrompt = workflow[kSampler]['inputs']['positive'][0]
     workflow[textPrompt]['inputs']['text'] = positivePrompt
+  } else if (CLIPTextEncode) {
+    workflow[CLIPTextEncode]['inputs']['text'] = positivePrompt
   } else {
     throw new Error(
       '❌ No KSampler or LoraTagLoader node found in the workflow.'

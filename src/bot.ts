@@ -13,6 +13,7 @@ import { generateImage } from './comfyui'
 import fs from 'fs'
 import { command as LorasCommand } from './commands/loras'
 import { generatePrompt } from './llm'
+import { command as ProcessImage } from './commands/processimage'
 
 dotenv.config()
 const allowedGuilds = process.env.ALLOWED_GUILDS?.split(',') || []
@@ -29,6 +30,24 @@ const lorabyCategory = LorasCommand.availableLoRAs.reduce(
   },
   {} as { [key: string]: any[] }
 )
+const processimage = new SlashCommandBuilder()
+  .setName('processimage')
+  .setDescription('Send an image to ComfyUI for processing')
+  .addAttachmentOption(option =>
+    option
+      .setName('image')
+      .setDescription('Upload an image')
+      .setRequired(true),
+  )
+const vibble = new SlashCommandBuilder()
+  .setName('vibble')
+  .setDescription('Generate a video')
+  .addStringOption((option) =>
+    option
+      .setName('prompt')
+      .setDescription('Describe what you want the video to be')
+      .setRequired(true)
+  )
 const scrble = new SlashCommandBuilder()
   .setName('scrble')
   .setDescription('Generates an AI image based on your terrible short prompt')
@@ -94,8 +113,10 @@ Object.keys(lorabyCategory).map((category) => {
 })
 
 const commandsList = [
+  vibble,
   scribble,
   scrble,
+  processimage,
   new SlashCommandBuilder()
     .setName('loras')
     .setDescription('List LoRAs available'),
@@ -175,8 +196,9 @@ client.on('interactionCreate', async (interaction: Interaction) => {
     await LorasCommand.command(interaction)
     return
   }
+  await ProcessImage.command(interaction)
 
-  if (commandName === 'scribble' || commandName === 'scrble') {
+  if (commandName === 'scribble' || commandName === 'scrble' || commandName == 'vibble') {
     // if prompt has a lora choice, then add it to the prompt
     let prompt = (
       interaction.options as CommandInteractionOptionResolver
@@ -200,12 +222,18 @@ client.on('interactionCreate', async (interaction: Interaction) => {
     // if it starts with "<lora>" then use the lora.json workflow
     // if it starts with "<negative>" then use the negative.json workflow
     let workflowFile = 'workflow_api_2.json'
+    let filePath = `./scribble.png`
     if (prompt.startsWith('<space>')) {
       workflowFile = 'space.json'
     } else if (prompt.startsWith('<horror>')) {
       workflowFile = 'horror.json'
     } else if (prompt.startsWith('<trek>')) {
       workflowFile = 'trek.json'
+    }
+    if (commandName === 'vibble') {
+      // Generate a prompt from the input
+      workflowFile = 'vibble.json'
+      filePath = `./vibble.webp`
     }
     try {
       console.log(`Generating image for prompt: ${prompt}`)
@@ -225,7 +253,6 @@ client.on('interactionCreate', async (interaction: Interaction) => {
       const imageBuffer = Buffer.from(base64Image, 'base64')
 
       // Save image temporarily
-      const filePath = `./scribble.png`
       fs.writeFileSync(filePath, imageBuffer)
 
       // Create Discord attachment
@@ -244,6 +271,7 @@ client.on('interactionCreate', async (interaction: Interaction) => {
       await interaction.editReply('Sorry had a bit of a problem.')
     }
   }
+
 })
 
 client.login(process.env.DISCORD_BOT_TOKEN)
