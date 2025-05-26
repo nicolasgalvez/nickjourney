@@ -10,6 +10,4 @@ COPY . /app
 RUN npm install
 
 # Start the application
-CMD ["npx", "tsx", "src/index.ts"]
-
-EXPOSE 3000
+CMD ["npx", "start"]

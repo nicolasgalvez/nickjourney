@@ -36,6 +36,7 @@ interface GenerateImageOptions {
   guidance?: number
   steps?: number
   seed?: number
+  sourceFile?: string
 }
 
 export async function generateImage(
