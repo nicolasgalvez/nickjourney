@@ -9,5 +9,5 @@ COPY . /app
 # Install dependencies
 RUN npm install
 
-# Start the application
-CMD ["npx", "start"]
+# Start the application and keep the container running after errors
+CMD ["sh", "-c", "npx start || tail -f /dev/null"]
